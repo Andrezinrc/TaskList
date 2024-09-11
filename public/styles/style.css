@@ -28,11 +28,11 @@ body {
 
 .card {
     padding: 20px;
-    border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     width: 30%;
     text-align: center;
     color: #fff;
+    border-radius: 4px;
 }
 
 .card h3 {
@@ -59,7 +59,7 @@ body {
 
 .sidebar {
     width: 250px;
-    background-color: #4a4e69;
+    background-color: #212121;
     color: #fff;
     padding: 20px;
     display: flex;
@@ -92,6 +92,11 @@ body {
     font-size: 18px;
     display: flex;
     align-items: center;
+    border-radius: 4px;
+    padding: 8px;
+}
+.sidebar-menu ul li a:hover{
+    background-color: #333;
 }
 
 .sidebar-menu ul li a i {
@@ -102,7 +107,7 @@ body {
     margin-left: 250px;
     padding: 30px;
     width: calc(100% - 250px);
-    background-color: #fff;
+    background-color: #f8f8f8;
     overflow-y: auto;
     height: 100vh;
 }
@@ -119,11 +124,22 @@ h1 {
     transform: translate(-50%, -50%);
     display: none;
 }
+.container-form-editar{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.form-tarefa {
+    max-width: 500px;
+}
 .form-tarefa, .container-lista {
     background: #fff;
     padding: 20px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
     margin-bottom: 30px;
+    border-radius: 4px;
 }
 
 .form-tarefa input, .form-tarefa textarea, .form-tarefa select {
@@ -147,18 +163,17 @@ h1 {
 }
 
 .adicionar {
-    background-color: #f25f5c;
+    background-color: #dd2f2c;
 }
 .adicionar:hover {
-    background-color: #d44d4a;
+    background-color: #c42522;
 }
 
 .lista-tarefas {
     list-style: none;
     padding: 0;
     border: 1px solid #ddd;
-    border-radius: 4px;
-    max-height: 350px;
+    max-height: 400px;
     overflow-y: auto;
 }
 
@@ -167,16 +182,19 @@ h1 {
 }
 .tarefa-item {
     background: #f9f9f9;
+    border: 1px solid #ddd;
     margin-bottom: 10px;
     padding: 15px;
-    border-radius: 4px;
     display: flex;
-    justify-content: space-between;
+    gap: 20px;
     align-items: center;
 }
 
 .tarefa-info {
     max-width: 60%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .lista-tarefas::-webkit-scrollbar {
@@ -206,7 +224,7 @@ h1 {
     color: #fff;
 }
 .btn-delete:hover {
-    background-color: #c0392b;
+    background-color: #a52f22;
 }
 
 .btn-atualiza {
@@ -214,11 +232,11 @@ h1 {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    background-color: #1da834;
+    background-color: #38cc51;
     color: #fff;
 }
-.btn-delete:hover {
-    background-color: #129929;
+.btn-atualiza {
+    background-color: #1e832f;
 }
 
 .btn-edit {
@@ -231,7 +249,7 @@ h1 {
 }
 
 .btn-edit:hover {
-    background-color:  #1749b4;
+    background-color:  #113788;
 }
 
 .copy {
@@ -240,6 +258,6 @@ h1 {
 }
 
 .copy span {
-    color: #4a4e69;
+    color: #3040ac;
     font-weight: bold;
 }

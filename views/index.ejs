@@ -34,27 +34,55 @@
                 <input type="text" name="titulo" id="titulo" placeholder="Título da tarefa" required>
 
                 <label for="descricao">Descrição</label>
-                <textarea name="descricao" id="descricao" placeholder="Descrição da tarefa"></textarea>
+                <textarea name="descricao" id="descricao" placeholder="Descrição da tarefa" required></textarea>
 
                 <label for="data_conclusao">Data de Conclusão</label>
-                <input type="date" name="data_vencimento" id="data_vencimento">
+                <input type="date" name="data_vencimento" id="data_vencimento" required>
 
                 <label for="prioridade">Prioridade</label>
-                <select name="prioridade" id="prioridade">
+                <select name="prioridade" id="prioridade" required>
                     <option value="alta">Alta</option>
                     <option value="media" selected>Média</option>
                     <option value="baixa">Baixa</option>
                 </select>
 
                 <label for="categoria">Categoria da Tarefa</label>
-                <input type="text" name="categoria" id="categoria" placeholder="Categoria da tarefa">
+                <input type="text" name="categoria" id="categoria" placeholder="Categoria da tarefa" required>
 
                 <button type="submit" class="btn adicionar">Adicionar tarefa</button>
             </form>
         </section>
 
+        <section class="container-form-editar" id="container-form-editar" style="display: none;">
+            <form method="POST" class="form-tarefa" id="form-edit" action="">
+                <h1>Editar Tarefa</h1>
+        
+                <input type="hidden" name="id" id="id_edit">
+        
+                <label for="titulo">Título</label>
+                <input type="text" name="titulo" id="titulo_edit" placeholder="Título da tarefa" required>
+        
+                <label for="descricao">Descrição</label>
+                <textarea name="descricao" id="descricao_edit" placeholder="Descrição da tarefa" required></textarea>
+        
+                <label for="data_vencimento">Data de Conclusão</label>
+                <input type="date" name="data_vencimento" id="data_vencimento_edit" required>
+        
+                <label for="prioridade">Prioridade</label>
+                <select name="prioridade" id="prioridade_edit" required>
+                    <option value="alta">Alta</option>
+                    <option value="media" selected>Média</option>
+                    <option value="baixa">Baixa</option>
+                </select>
+        
+                <label for="categoria">Categoria da Tarefa</label>
+                <input type="text" name="categoria" id="categoria_edit" placeholder="Categoria da tarefa" required>
+        
+                <button type="submit" class="btn adicionar">Salvar alterações</button>
+            </form>
+        </section>
+             
         <section class="container-lista" id="container-lista">
-            <h1>Minhas Tarefas</h1>
             <ul class="lista-tarefas" id="lista-tarefas">
                 <% if (tasks.length > 0) { %>
                     <% tasks.forEach(task => { %>
@@ -67,11 +95,11 @@
                                 <p><small>Categoria: <%= task.categoria %></small></p>
                                 <p><small>Dias Restantes: <span class="dias-restantes"><%= task.diasRestantes %></span></small></p>
     
-                                <% if(task.status === "pendente" ){ %>
+                                <% if (task.status === "pendente") { %>
                                     <p style="color: crimson;"><small>Status: <%= task.status %></small></p>
                                 <% } else { %>
-                                    <p style="color: green"><small>Status: <%= task.status %></small></p>
-                                <% } %>
+                                    <p style="color: green;"><small>Status: <%= task.status %></small></p>
+                                <% } %>                                
                             </div>
     
                             <form action="/tasks/atualizar/<%= task.id %>" method="POST" class="form-atualizar">
@@ -81,9 +109,9 @@
                                 </button>
                             </form>
                             
-                            <div class="btn-edit" data-id="<%= task.id %>">
+                            <button class="btn-edit" data-id="<%= task.id %>" id="btn-edit-<%= task.id %>">
                                 <i class="fas fa-pencil-alt"></i>
-                            </div>    
+                            </button>                         
     
                             <form action="/tasks/excluir/<%= task.id %>" method="POST" class="form-excluir">
                                 <button type="submit" class="btn-delete">
@@ -97,26 +125,30 @@
                 <% } %>
             </ul>
         </section>
+        <div class="copy">
+            <p>&copy; 2024. Desenvolvido por <span>Andrezinrc</span></p>
+        </div>
     </main> 
 </div>
 
 <script>
+document.addEventListener('DOMContentLoaded', () => {
+    let cards = document.querySelector('.dashboard-cards');
     let formAdd = document.getElementById("container-form-adicionar");
+    let formEdit = document.getElementById("container-form-editar");
     let toggleFormBtn = document.getElementById("toggle-form");
     let toggleLista = document.getElementById("toggle-lista");
     let toggleIcon = toggleFormBtn.querySelector('i');
-
     let containerLista = document.getElementById('container-lista');
 
     toggleFormBtn.addEventListener('click', () => {
         if (formAdd.style.display === "none" || formAdd.style.display === "") {
             formAdd.style.display = "block";
-            containerLista.style.display = "none";
+            formEdit.style.display = "none";
             toggleIcon.classList.remove('fa-chevron-down');
             toggleIcon.classList.add('fa-chevron-up');
         } else {
             formAdd.style.display = "none";
-            containerLista.style.display = "block";
             toggleIcon.classList.remove('fa-chevron-up');
             toggleIcon.classList.add('fa-chevron-down');
         }
@@ -126,14 +158,14 @@
         if (containerLista.style.display === "none" || containerLista.style.display === "") {
             containerLista.style.display = "block";
             formAdd.style.display = "none";
+            formEdit.style.display = "none";
+            cards.style.display = "none";
         } else {
-            containerLista.style.display = "none";
-            formAdd.style.display = "none";
+            containerLista.style.display = "block";
         }
     });
-    document.addEventListener('DOMContentLoaded', () => {
-    const tasks = document.querySelectorAll('.tarefa-item');
 
+    const tasks = document.querySelectorAll('.tarefa-item');
     tasks.forEach(task => {
         const dataVencimento = new Date(task.querySelector('p small').textContent.split(': ')[1]);
         const hoje = new Date();
@@ -148,6 +180,37 @@
             task.querySelector('.form-atualizar button').setAttribute('disabled', true);
             task.querySelector('.form-atualizar').style.display = 'none';
         }
+    });
+
+    const btnsEdit = document.querySelectorAll('.btn-edit');
+
+    btnsEdit.forEach(btn => {
+        btn.addEventListener('click', async function () {
+            const taskId = this.getAttribute('data-id');
+
+            try {
+                const response = await fetch(`/${taskId}`);
+                const data = await response.json();
+                const task = data.task;
+    
+                console.log(task);
+                
+                document.getElementById('titulo_edit').value = task.titulo;
+                document.getElementById('descricao_edit').value = task.descricao;
+                document.getElementById('data_vencimento_edit').value = task.data_vencimento;
+                document.getElementById('prioridade_edit').value = task.prioridade;
+                document.getElementById('categoria_edit').value = task.categoria;
+
+                document.getElementById('container-form-editar').style.display = 'block';
+
+                const formEdit = document.getElementById('form-edit');
+                formEdit.action = `/tasks/editar/${taskId}`;
+
+            } catch (error) {
+                console.error('Erro ao buscar os dados da tarefa:', error);
+                alert('Erro ao carregar os dados da tarefa. Tente novamente.');
+            }
+        });
     });
 });
 </script>

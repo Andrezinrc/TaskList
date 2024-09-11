@@ -42,10 +42,11 @@ const updateStatusTask = (id, { status }) => {
     });
 };
 
-const updateTask = (id, { task }) => {
+const updateTask = (id, task ) => {
     return new Promise((resolve, reject) => {
+        const { titulo, descricao, data_vencimento, prioridade, categoria } = task;
         const sql = 'UPDATE tasks SET titulo = ?, descricao = ?, data_vencimento = ?, prioridade = ?, categoria = ? WHERE id = ?';
-        db.query(sql, [task, id], (err, results) => {
+        db.query(sql, [titulo, descricao, data_vencimento, prioridade, categoria, id], (err, results) => {
             if (err) reject(err);
             else resolve(results);
         });

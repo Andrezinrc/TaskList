@@ -19,7 +19,6 @@ const getTaskId = async (req, res) => {
         const results = await taskModel.getTaskId(id);
         res.status(200).json({ task: results });
     } catch (err) {
-        console.log('erro ao tentar buscar tarefa', err);
         res.status(500).json({ error: 'erro ao tentar buscar tarefa'});
     }
 }
@@ -27,7 +26,7 @@ const getTaskId = async (req, res) => {
 const createTask = async (req, res) => {
     try{
         const task = req.body;
-        const results = await taskModel.createTask(task);
+        await taskModel.createTask(task);
         res.redirect('/');
     } catch (err) {
         console.log('erro ao tentar criar tarefa', err);
@@ -42,7 +41,7 @@ const updateStatusTask = async (req, res) => {
         if (status !== 'pendente' && status !== 'concluida') {
             return res.status(400).send('Status inválido');
         }
-        const results = await taskModel.updateStatusTask(id, { status });
+        await taskModel.updateStatusTask(id, { status });
         res.redirect('/');
     } catch (err) {
         console.log('erro ao tentar atualizar tarefa', err);
@@ -51,21 +50,21 @@ const updateStatusTask = async (req, res) => {
 }
 
 const updateTask = async (req, res) => {
-    try{
-        const { id } = req.params;
-        const { titulo, descricao, data_vencimento, prioridade, categoria } = req.body;
-        const results = await taskModel.updateTask(id, { titulo, descricao, data_vencimento, prioridade, categoria });
+    try {
+        const id = req.params.id;
+        const task = req.body;
+        await taskModel.updateTask(id, task);
         res.redirect('/');
     } catch (err) {
-        console.log('erro ao tentar editar tarefa');
-        res.status(500).json({ error: 'erro ao tentar editar tarefa'});
+        res.status(500).json({ error: 'erro ao atualizar tarefa'});
+        console.log('erro ao atualizar tarefa', err);
     }
 }
 
 const deleteTask = async (req, res) => {
     try{
         const id = req.params.id;
-        const results = await taskModel.deleteTask(id);
+        await taskModel.deleteTask(id);
         res.redirect('/');
     } catch (err) {
         res.status(500).json({ error: 'erro ao tentar deletar tarefa'});
